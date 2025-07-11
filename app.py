@@ -168,10 +168,10 @@ st.markdown("""
         background: rgba(0,153,255,0.85) !important;
         color: #fff !important;
         font-family: 'Oswald', 'Open Sans', Arial, sans-serif !important;
-        font-size: 3.2rem !important;
+        font-size: 2.2rem !important; /* Increased text size */
         font-weight: 900 !important;
-        border-radius: 24px !important;
-        padding: 1.2em 4em !important;
+        border-radius: 18px !important;
+        padding: 0.5em 1.5em !important; /* Reduced button size */
         box-shadow: 0 4px 24px 0 rgba(0,153,255,0.13);
         border: none !important;
         transition: all 0.2s cubic-bezier(.4,0,.2,1);
