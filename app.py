@@ -392,33 +392,41 @@ def main():
     st.markdown('<div style="height: 32px;"></div>', unsafe_allow_html=True)
     show_match_state_chart(target, score, overs, wickets_down)
 
-    pipe = load_model()
+    try:
+        pipe = load_model()
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+        return
+
     col_btn, col_prob = st.columns([1,2])
     with col_btn:
         predict = st.button('Predict Probability')
     with col_prob:
         if predict:
-            runs_left = target - score
-            balls_left = 120 - int(overs*6)
-            wickets_left = 10 - wickets_down
-            crr = score/overs if overs > 0 else 0
-            rrr = (runs_left*6)/balls_left if balls_left > 0 else 0
+            try:
+                runs_left = target - score
+                balls_left = 120 - int(overs*6)
+                wickets_left = 10 - wickets_down
+                crr = score/overs if overs > 0 else 0
+                rrr = (runs_left*6)/balls_left if balls_left > 0 else 0
 
-            input_df = pd.DataFrame({
-                'batting_team':[batting_team],
-                'bowling_team':[bowling_team],
-                'city':[selected_city],
-                'runs_left':[runs_left],
-                'balls_left':[balls_left],
-                'wickets':[wickets_left],
-                'total_runs_x':[target],
-                'crr':[crr],
-                'rrr':[rrr]
-            })
+                input_df = pd.DataFrame({
+                    'batting_team':[batting_team],
+                    'bowling_team':[bowling_team],
+                    'city':[selected_city],
+                    'runs_left':[runs_left],
+                    'balls_left':[balls_left],
+                    'wickets':[wickets_left],
+                    'total_runs_x':[target],
+                    'crr':[crr],
+                    'rrr':[rrr]
+                })
 
-            result = pipe.predict_proba(input_df)
-            win = result[0][1]
-            show_probability_result(batting_team, win)
+                result = pipe.predict_proba(input_df)
+                win = result[0][1]
+                show_probability_result(batting_team, win)
+            except Exception as e:
+                st.error(f"Prediction error: {e}")
 
 if __name__ == "__main__":
     main()
